@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.ActivitySplash"
-            android:label="@string/title_activity_intro">
+            android:name=".activity.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

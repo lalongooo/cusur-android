@@ -10,7 +10,7 @@ class ActivitySplash : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+        setContentView(R.layout.activity_splash)
 
         val SPLASH_DISPLAY_LENGTH = 2000
 

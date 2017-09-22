@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">CUSURAndroid</string>
+    <string name="app_name">CUSur</string>
     <string name="title_activity_intro">ActivityIntro</string>
     <string name="cusur_android_intro">CUSUR Android</string>
+    <string name="udg_logo_description">Universidad de Guadalajara</string>
 
     <!--Config strings-->
     <string name="facebook_app_id">1430286513693884</string>
