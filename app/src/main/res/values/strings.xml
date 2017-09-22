@@ -2,4 +2,9 @@
     <string name="app_name">CUSURAndroid</string>
     <string name="title_activity_intro">ActivityIntro</string>
     <string name="cusur_android_intro">CUSUR Android</string>
+
+    <!--Config strings-->
+    <string name="facebook_app_id">1430286513693884</string>
+    <string name="fb_login_protocol_scheme">fb1430286513693884</string>
+
 </resources>
