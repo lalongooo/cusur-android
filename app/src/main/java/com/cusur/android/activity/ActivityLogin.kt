@@ -28,11 +28,11 @@ class ActivityLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        login_button.setReadPermissions("email", "public_profile")
-        login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        loginButton.setReadPermissions("email", "public_profile")
+        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                Log.d("FBLogin", "Success!")
-                login_button.visibility = View.INVISIBLE
+                loginButton.visibility = View.INVISIBLE
+                progressBar.visibility = View.VISIBLE
                 handleFacebookAccessToken(result.accessToken)
             }
 
@@ -43,7 +43,6 @@ class ActivityLogin : AppCompatActivity() {
             override fun onError(error: FacebookException?) {
                 Log.d("FBLogin", "Error!")
             }
-
         })
     }
 
@@ -67,12 +66,11 @@ class ActivityLogin : AppCompatActivity() {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success")
-                        Toast.makeText(this@ActivityLogin, "Authentication succeeded.", Toast.LENGTH_SHORT).show()
+                        val mainIntent = Intent(this@ActivityLogin, ActivityFeed::class.java)
+                        startActivity(mainIntent)
+                        finish()
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
                         Toast.makeText(this@ActivityLogin, "Authentication failed.", Toast.LENGTH_SHORT).show()
                     }
                 }
