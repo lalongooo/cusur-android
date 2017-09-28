@@ -5,13 +5,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.cusur.android.R
+import com.cusur.android.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_take_picture.*
 
-class ActivityTakePicture : AppCompatActivity() {
+
+class ActivityTakePicture : BaseActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 567
+    private var databaseReference = database.getReference("publication")
 
     companion object {
         val EXTRA_TAKE_PICTURE = "take_picture"
@@ -21,6 +24,7 @@ class ActivityTakePicture : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_picture)
         handleExtras(intent)
+        setupClickListeners()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -55,4 +59,16 @@ class ActivityTakePicture : AppCompatActivity() {
     private fun handleTakenPicture(takenPicture: Bitmap) {
         ivTakenPicture.setImageBitmap(takenPicture)
     }
+
+    private fun setupClickListeners() {
+        btnPost.setOnClickListener {
+            databaseReference
+                    .child(firebaseUser?.uid)
+                    .push().setValue(etComment.text.toString()) { databaseError, databaseReference ->
+                Toast.makeText(this@ActivityTakePicture, "Post sent!.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    data class Publication(val name: String, val age: Int)
 }
