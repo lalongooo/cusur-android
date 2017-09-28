@@ -8,13 +8,18 @@ import android.provider.MediaStore
 import android.widget.Toast
 import com.cusur.android.R
 import com.cusur.android.base.BaseActivity
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_take_picture.*
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class ActivityTakePicture : BaseActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 567
-    private var databaseReference = database.getReference("publication")
+    private val databaseReference = mDatabase.getReference("publication")
+    private val userId = mFirebaseUser?.uid ?: ""
+    lateinit var byteArrayPicture: ByteArray
 
     companion object {
         val EXTRA_TAKE_PICTURE = "take_picture"
@@ -25,6 +30,7 @@ class ActivityTakePicture : BaseActivity() {
         setContentView(R.layout.activity_take_picture)
         handleExtras(intent)
         setupClickListeners()
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,17 +64,42 @@ class ActivityTakePicture : BaseActivity() {
 
     private fun handleTakenPicture(takenPicture: Bitmap) {
         ivTakenPicture.setImageBitmap(takenPicture)
+        compressPicture(takenPicture)
+    }
+
+    private fun compressPicture(takenPicture: Bitmap) {
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        takenPicture.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        byteArrayPicture = byteArrayOutputStream.toByteArray()
+
     }
 
     private fun setupClickListeners() {
         btnPost.setOnClickListener {
-            databaseReference
-                    .child(firebaseUser?.uid)
-                    .push().setValue(etComment.text.toString()) { databaseError, databaseReference ->
-                Toast.makeText(this@ActivityTakePicture, "Post sent!.", Toast.LENGTH_SHORT).show()
-            }
+
+            val picturesFolder = "pictures/"
+            val fileName = "/" + UUID.randomUUID().toString() + ".png"
+            val storageReference: StorageReference = mStorage.getReference(picturesFolder + userId + fileName)
+            val uploadTask = storageReference.putBytes(byteArrayPicture)
+
+            uploadTask.addOnFailureListener({
+                Toast.makeText(this@ActivityTakePicture, "An error has occurred.", Toast.LENGTH_SHORT).show()
+            }).addOnSuccessListener({ taskSnapshot ->
+                val downloadUrl = taskSnapshot.downloadUrl.toString()
+                val publication = Publication(etComment.text.toString(), downloadUrl)
+
+                databaseReference
+                        .child(userId)
+                        .push()
+                        .setValue(publication) { databaseError, databaseReference ->
+                            Toast.makeText(this@ActivityTakePicture, "Post sent!.", Toast.LENGTH_SHORT).show()
+                        }
+            })
+
+
         }
     }
 
-    data class Publication(val name: String, val age: Int)
+    data class Publication(val comment: String, val downloadUrl: String)
 }

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.cusur.android.R
 import kotlinx.android.synthetic.main.activity_feed.*
 
-
 class ActivityFeed : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

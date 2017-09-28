@@ -17,7 +17,7 @@ class ActivitySplash : BaseActivity() {
         Handler().postDelayed({
 
             var mainIntent = Intent(baseContext, ActivityLogin::class.java)
-            if (firebaseUser != null) {
+            if (mFirebaseUser != null) {
                 mainIntent = Intent(baseContext, ActivityFeed::class.java)
             }
 
