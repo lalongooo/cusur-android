@@ -8,5 +8,7 @@
     <string name="cusur_android_intro">CUSUR Android</string>
     <string name="udg_logo_description">Universidad de Guadalajara</string>
     <string name="recently_taken_picture">Recently Taken Picture</string>
+    <string name="add_a_comment">Add a comment</string>
+    <string name="post">Post</string>
 
 </resources>
