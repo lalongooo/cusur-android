@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cusur.android.activity.ActivityTakePicture">
+    tools:context="com.cusur.android.activity.ActivityWritePost">
 
     <ImageView
         android:id="@+id/ivTakenPicture"
@@ -43,5 +43,19 @@
         android:layout_toEndOf="@+id/ivTakenPicture"
         android:layout_toRightOf="@+id/ivTakenPicture"
         android:text="@string/post" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/btnPost"
+        android:layout_alignEnd="@id/etComment"
+        android:layout_alignRight="@id/etComment"
+        android:layout_alignTop="@id/btnPost"
+        android:layout_toEndOf="@id/btnPost"
+        android:layout_toRightOf="@id/btnPost"
+        android:indeterminateOnly="true" />
 
 </RelativeLayout>

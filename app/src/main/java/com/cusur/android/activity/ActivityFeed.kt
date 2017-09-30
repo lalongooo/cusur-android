@@ -12,8 +12,8 @@ class ActivityFeed : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
         fab.setOnClickListener {
-            val mainIntent = Intent(this@ActivityFeed, ActivityTakePicture::class.java)
-            mainIntent.putExtra(ActivityTakePicture.EXTRA_TAKE_PICTURE, true)
+            val mainIntent = Intent(this@ActivityFeed, ActivityWritePost::class.java)
+            mainIntent.putExtra(ActivityWritePost.EXTRA_TAKE_PICTURE, true)
             startActivity(mainIntent)
         }
     }

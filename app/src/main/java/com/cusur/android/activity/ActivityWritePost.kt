@@ -5,16 +5,18 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import com.cusur.android.R
 import com.cusur.android.base.BaseActivity
+import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_take_picture.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-
-class ActivityTakePicture : BaseActivity() {
+class ActivityWritePost : BaseActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 567
     private val databaseReference = mDatabase.getReference("publication")
@@ -78,28 +80,45 @@ class ActivityTakePicture : BaseActivity() {
     private fun setupClickListeners() {
         btnPost.setOnClickListener {
 
-            val picturesFolder = "pictures/"
-            val fileName = "/" + UUID.randomUUID().toString() + ".png"
-            val storageReference: StorageReference = mStorage.getReference(picturesFolder + userId + fileName)
-            val uploadTask = storageReference.putBytes(byteArrayPicture)
+            val comment = etComment.text
+            if (!TextUtils.isEmpty(comment)) {
 
-            uploadTask.addOnFailureListener({
-                Toast.makeText(this@ActivityTakePicture, "An error has occurred.", Toast.LENGTH_SHORT).show()
-            }).addOnSuccessListener({ taskSnapshot ->
-                val downloadUrl = taskSnapshot.downloadUrl.toString()
-                val publication = Publication(etComment.text.toString(), downloadUrl)
+                progressBar.visibility = View.VISIBLE
+                btnPost.isEnabled = false
 
-                databaseReference
-                        .child(userId)
-                        .push()
-                        .setValue(publication) { databaseError, databaseReference ->
-                            Toast.makeText(this@ActivityTakePicture, "Post sent!.", Toast.LENGTH_SHORT).show()
-                        }
-            })
+                val picturesFolder = "pictures/"
+                val fileName = "/" + UUID.randomUUID().toString() + ".png"
+                val storageReference: StorageReference = mStorage.getReference(picturesFolder + userId + fileName)
+                val uploadTask = storageReference.putBytes(byteArrayPicture)
 
+                uploadTask.addOnFailureListener({
 
+                    progressBar.visibility = View.INVISIBLE
+                    btnPost.isEnabled = true
+                    Toast.makeText(this@ActivityWritePost, "An error has occurred. Try again.", Toast.LENGTH_SHORT).show()
+
+                }).addOnSuccessListener({ taskSnapshot ->
+
+                    val publication = Publication(
+                            etComment.text.toString(),
+                            taskSnapshot.downloadUrl.toString()
+                    )
+
+                    databaseReference
+                            .child(userId)
+                            .push()
+                            .setValue(publication) { databaseError, databaseReference ->
+                                etComment.setText("")
+                                progressBar.visibility = View.INVISIBLE
+                                btnPost.isEnabled = true
+                                Toast.makeText(this@ActivityWritePost, "Post sent!.", Toast.LENGTH_SHORT).show()
+                            }
+                })
+            } else {
+                Toast.makeText(this@ActivityWritePost, "Write a comment for this picture", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    data class Publication(val comment: String, val downloadUrl: String)
+    data class Publication(val comment: String, val downloadUrl: String, var dateCreated: Map<String, String> = ServerValue.TIMESTAMP)
 }
