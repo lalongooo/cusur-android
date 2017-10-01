@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.Toast
 import com.cusur.android.R
 import com.cusur.android.base.BaseActivity
-import com.google.firebase.database.ServerValue
+import com.cusur.android.dataclass.Publication
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_take_picture.*
 import java.io.ByteArrayOutputStream
@@ -32,7 +32,6 @@ class ActivityWritePost : BaseActivity() {
         setContentView(R.layout.activity_take_picture)
         handleExtras(intent)
         setupClickListeners()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -119,6 +118,4 @@ class ActivityWritePost : BaseActivity() {
             }
         }
     }
-
-    data class Publication(val comment: String, val downloadUrl: String, var dateCreated: Map<String, String> = ServerValue.TIMESTAMP)
 }

@@ -10,5 +10,7 @@
     <string name="recently_taken_picture">Recently Taken Picture</string>
     <string name="add_a_comment">Add a comment</string>
     <string name="post">Post</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="camera_icon">Camera icon</string>
 
 </resources>
