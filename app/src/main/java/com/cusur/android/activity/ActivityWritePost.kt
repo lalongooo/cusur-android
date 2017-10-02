@@ -110,6 +110,7 @@ class ActivityWritePost : BaseActivity() {
                                 etComment.setText("")
                                 progressBar.visibility = View.INVISIBLE
                                 btnPost.isEnabled = true
+                                this@ActivityWritePost.finish()
                                 Toast.makeText(this@ActivityWritePost, "Post sent!.", Toast.LENGTH_SHORT).show()
                             }
                 })

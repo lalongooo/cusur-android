@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.cusur.android.R
 import com.cusur.android.dataclass.Publication
+import com.cusur.android.utils.Utils
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.feed_item.view.*
 
 class AdapterPostsFeed(var publications: MutableList<Publication>) : RecyclerView.Adapter<AdapterPostsFeed.ViewHolder>() {
@@ -31,9 +33,21 @@ class AdapterPostsFeed(var publications: MutableList<Publication>) : RecyclerVie
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindItems(publication: Publication) {
-            // itemView.ivPostPicture
-            itemView.tvDateCreated.text = publication.dateCreated.toString()
+            // Set comment text
             itemView.tvPostComment.text = publication.comment
+
+            // Set post date (formatted)
+            itemView.tvDateCreated.text = Utils()
+                    .getTimeAgo(publication.postDate)
+
+            // Set picture
+            Picasso.with(itemView.ivPostPicture.context)
+                    .load(publication.downloadUrl)
+                    .placeholder(R.drawable.default_post_picture)
+                    .error(R.drawable.default_post_picture)
+                    .fit()
+                    .noFade()
+                    .into(itemView.ivPostPicture)
         }
     }
 }

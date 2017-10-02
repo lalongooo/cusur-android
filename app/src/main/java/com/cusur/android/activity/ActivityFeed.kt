@@ -68,14 +68,14 @@ class ActivityFeed : BaseActivity() {
 
                 val publication = Publication(
                         dataSnapshot.child("comment").value.toString(),
-                        dataSnapshot.child("downloadUrl").value.toString()
+                        dataSnapshot.child("downloadUrl").value.toString(),
+                        dataSnapshot.child("dateCreated").value.toString().toLong()
                 )
                 mAdapter.add(publication)
                 rvPosts.smoothScrollToPosition(0)
                 rvPosts.visibility = View.VISIBLE
                 cameraIcon.visibility = View.INVISIBLE
                 tvEmptyMessage.visibility = View.INVISIBLE
-
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot?) {
